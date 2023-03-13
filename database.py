@@ -39,4 +39,18 @@ def load_job(id):
       return rows[0]._asdict()
 
 
-print(load_job(3))
+# store data in the database
+def store_applications(job_id, data):
+  query = text(
+    "INSERT INTO applications (job_id, full_name, email, education, work_experience, linkedin_url, resume_url) VALUES (:job_id, :full_name, :email, :education, :work_experience, :linkedin_url, resume_url)"
+  )
+
+  with engine.connect() as connection:
+    connection.execute(query,
+                       job_id=job_id,
+                       full_name=data["full_name"],
+                       email=data["email"],
+                       education=data["education"],
+                       work_experience=["work_experience"],
+                       linkedin_url=data["linkedin_url"],
+                       resume_url=data["resume_url"])
