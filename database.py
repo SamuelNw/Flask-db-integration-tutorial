@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, text
 import os
+import sqlalchemy
 
 db_connection_string = os.environ['DB_CONNECTION_STRING']
 
@@ -41,16 +42,15 @@ def load_job(id):
 
 # store data in the database
 def store_applications(job_id, data):
+  # query = text(
+  #   "INSERT INTO applications (job_id, full_name, email, education, work_experience, linkedin_url, resume_url) VALUES (:job_id, :full_name, :email, :education, :work_experience, :linkedin_url, resume_url)"
+  # )
+
   query = text(
-    "INSERT INTO applications (job_id, full_name, email, education, work_experience, linkedin_url, resume_url) VALUES (:job_id, :full_name, :email, :education, :work_experience, :linkedin_url, resume_url)"
+    "INSERT INTO applications (job_id, full_name, email, education, work_experience, linkedin_url, resume_url) VALUES (:1, :2, :3, :4, :5, :6, :7)"
   )
 
   with engine.connect() as connection:
-    connection.execute(query,
-                       job_id=job_id,
-                       full_name=data["full_name"],
-                       email=data["email"],
-                       education=data["education"],
-                       work_experience=["work_experience"],
-                       linkedin_url=data["linkedin_url"],
-                       resume_url=data["resume_url"])
+    connection.execute(query, job_id, data["full_name"], data["email"],
+                       data["education"], data["work_experience"],
+                       data["linkedin_url"], data["resume_url"])
